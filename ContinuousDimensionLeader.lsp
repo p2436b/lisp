@@ -1,9 +1,14 @@
 ;; Set Text Heigh
 (defun c:cdlth () 
-  (setq th (getreal 
-             (strcat "\nEnter text heigh <" (getenv "cdl_texth") ">:")
-           )
+  (setq texth (getenv "cdl_texth"))
+  (if texth 
+    (setq th (getreal 
+               (strcat "\nEnter text heigh <" texth ">:")
+             )
+    )
+    (setq th (getreal "\nEnter text heigh: "))
   )
+
   (if th 
     (setenv "cdl_texth" (rtos th 2 1))
   )
@@ -105,26 +110,32 @@
 )
 
 
-;; ContinuousDimensionLeader 1.2
+;; ContinuousDimensionLeader 1.3
 (defun c:cdl () 
   (princ 
     "\n****************************************************
      \n Developed by Peyman Bayat
      \n p2436b@gmail.com
-     \n version  1.2
+     \n version  1.3
+     \n Commands:
+     \n cdlth => Setting font heigh
+     \n cdl => Start drawing
+     \n * if 'cdl' command is not working first set the font heigh with 'cdlth' command *
      \n****************************************************\n"
   )
   (vl-load-com)
   (setq doc (vla-get-activedocument (vlax-get-acad-object)))
   (setq modelSpace (vla-get-modelspace doc))
   (setvar "DIMZIN" 3)
-  (setq th (atof (getenv "cdl_texth")))
-  (if (not th) 
+
+
+  (setq texth (getenv "cdl_texth"))
+  (if (not texth) 
     (progn 
       (setq th (getreal "\nEnter text heigh: "))
       (if th 
         (setenv "cdl_texth" (rtos th 2 1))
-        (setenv "cdl_texth" 1)
+        (setenv "cdl_texth" 10)
       )
     )
   )
